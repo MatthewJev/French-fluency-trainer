@@ -1,64 +1,33 @@
 const app = document.getElementById("app")
 
-const sentences = {
-  beginner: [
-    {
-      id: 1,
-      french: "Bonjour, je m'appelle Mathieu.",
-      english: "Hello, my name is Matthew."
-    },
-    {
-      id: 2,
-      french: "J'aime jouer au football.",
-      english: "I like playing soccer."
-    },
-    {
-      id: 3,
-      french: "Je vais à l'école aujourd'hui.",
-      english: "I am going to school today."
-    }],
-
-
-  intermediate: [
-    {
-      id: 4,
-      french: "Je travaille à temps partiel pendant mes études.",
-      english: "I work part-time during my studies."
-    },
-    {
-      id: 5,
-      french: "Nous avons regardé un film intéressant hier soir.",
-      english: "We watched an interesting movie last night."
-    },
-    {
-      id: 6,
-      french: "J'essaie d'améliorer mon français chaque jour.",
-      english: "I try to improve my French every day."
-    }
-  ],
-
-  advanced: [
-    {
-      id: 7,
-      french: "Bien que le projet soit difficile, nous continuerons à avancer.",
-      english: "Although the project is difficult, we will continue to move forward."
-    },
-    {
-      id: 8,
-      french: "Si j'avais su plus tôt, j'aurais pris une décision différente.",
-      english: "If I had known earlier, I would have made a different decision."
-    },
-    {
-      id: 9,
-      french: "Les technologies modernes transforment rapidement notre société.",
-      english: "Modern technologies are rapidly transforming our society."
-    }
-  ]
-};
 
 let selectedMode = null 
+const frenchWords = [
+  "je", "tu", "elle", "nous", "vous", "ils", "elles",
+  "suis", "es", "est", "sommes", "êtes", "sont",
+  "vais", "vas", "va", "allons", "allez", "vont",
+  "ai", "avons", "avez", "ont",
 
+  "le", "la", "les", "une", "des", "du",
+  "de", "dans", "avec", "pour", "sur", "chez",
+  "au", "aux",
 
+  "ce", "cet", "cette", "ces",
+  "mon", "ma", "mes", "ton", "ta", "tes",
+  "notre", "votre", "leur", "leurs",
+
+  "où", "qui", "quoi", "quand", "comment", "pourquoi",
+
+  "bonjour", "salut", "bonsoir", "merci",
+  "bientôt", "soirée", "journée", "demain",
+  "aujourd'hui", "maintenant",
+
+  "maison", "école", "voiture", "train", "avion",
+  "chien", "fille", "fils", "grand-mère",
+
+  "manger", "parler", "prendre", "aller", "venir",
+  "voir", "dire", "faire", "vouloir", "pouvoir"
+];
 // RENDER FUNCTIONS
 function renderHomeScreen(){
 
@@ -68,12 +37,19 @@ app.replaceChildren(homeUi)
 }
 
 
-function renderDifficultySelectionScreen(){
-  let difficultyUi = buildDifficultySelectionUI()
 
-  app.replaceChildren(difficultyUi)
+
+function renderLearningScreen(){
+  let learningUi = buildLearningScreenUI()
+
+  app.replaceChildren(learningUi)
 }
 
+function renderImportScreen(){
+  let importScreen = buildImportScreenUI()
+
+  app.replaceChildren(importScreen)
+}
 
 //BUILD FUNCTIONS 
 function buildHomePageUI(){
@@ -89,12 +65,13 @@ listenBtn.textContent = "Practice Listening"
 
 speechBtn.addEventListener("click", function(){
   selectedMode = "speech"
-  renderDifficultySelectionScreen()
+
 })
 
 listenBtn.addEventListener("click", function(){
   selectedMode = "listening"
-  renderDifficultySelectionScreen()
+  renderImportScreen()
+  
 })
 
 div.append(speechBtn,listenBtn)
@@ -104,24 +81,73 @@ return div
 }
 
 
-function buildDifficultySelectionUI(){
-let div = document.createElement("div")
+function buildLearningScreenUI(){
+  let p = document.createElement("p")
+  let div = document.createElement("div")
 
-let instructions = document.createElement("p")
+  p.textContent = "this is the learing screen"
+  div.append(p)
 
-let beginnerBtn = document.createElement("button")
-let intermediateBtn = document.createElement("button")
-let advancedBtn = document.createElement("button")
+  return div 
+}
 
-instructions.textContent = `select difficulty for your ${selectedMode} training`
+function buildImportScreenUI(){
+  let div = document.createElement("div")
+  let p = document.createElement("p")
+  let fileInput = document.createElement("input")
 
-beginnerBtn.textContent = "Beginner"
-intermediateBtn.textContent = "Intermediate"
-advancedBtn.textContent = "Advanced"
+  p.textContent = "Import anki cards below"
 
-div.append(instructions, beginnerBtn,intermediateBtn,advancedBtn)
+  fileInput.type = "file"
+  fileInput.accept = ".txt,.csv"
 
-return div 
+  fileInput.addEventListener("change",function(event){
+  let file = event.target.files[0]
+
+  file.text()
+  .then(function(data){
+    let lines = data.split("\n")
+
+    lines.forEach(element => {
+      
+      let newLine = element.split("\t")
+
+      console.log(newLine) 
+
+      if(newLine.length !== 2){
+        return
+      }else{
+       let leftSide = newLine[0]
+      let rightSide = newLine[1]
+
+      let leftWords = leftSide.split(" ")
+      let rightWords = rightSide.split(" ")
+
+      let checkLeft = leftWords.some(element=>{
+        return frenchWords.includes(element);
+      })
+ let frenchSentence = null 
+      if(checkLeft === true){
+       frenchSentence = leftSide
+      } else frenchSentence = rightSide
+    
+      console.log(frenchSentence) 
+      }
+
+      
+    }) 
+ 
+  })
+
+
+  })
+
+div.append(p,fileInput)
+
+
+
+return div
+
 }
 
 renderHomeScreen()
