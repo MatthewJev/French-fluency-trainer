@@ -66,6 +66,11 @@ function renderImportScreen(){
   app.replaceChildren(importScreen)
 }
 
+function renderCompletionScreen(){
+  let completionScreen = buildCompletionScreenUI()
+  app.replaceChildren(completionScreen)
+}
+
 //BUILD FUNCTIONS 
 function buildHomePageUI(){
 let div = document.createElement("div")
@@ -108,11 +113,12 @@ function buildLearningScreenUI(){
   input.placeholder = "what did you hear?"
 
   btn.addEventListener("click", function(){
-    if(generatedSentences[currentScentenceIndex] !== undefined){
-      currentScentenceIndex++
-      renderLearningScreen()
+    if(currentSentenceIndex === generatedSentences.length - 1){
+    renderCompletionScreen()
     }else {
-
+    
+    currentScentenceIndex++
+    renderLearningScreen()
     }
     
     
@@ -150,6 +156,18 @@ function buildImportScreenUI(){
 
 div.append(p,fileInput)
 return div
+}
+
+function buildCompletionScreenUI(){
+  let p = document.createElement("p")
+  let btn = document.createElement("button")
+  let div = document.createElement("div")
+
+  p.textContent = "scentences completed"
+  btn.textContent = "generate more"
+  div.append(p,btn)
+
+  return div
 }
 
 
