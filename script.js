@@ -100,11 +100,25 @@ function buildLearningScreenUI(){
   let p = document.createElement("p")
   let div = document.createElement("div")
   let btn = document.createElement("button")
+  let input = document.createElement ("input")
 
+  
   p.textContent = generatedSentences[currentScentenceIndex].french
-  btn.textContent = "next scentence"
+  btn.textContent = "enter"
+  input.placeholder = "what did you hear?"
 
-  div.append(p,btn)
+  btn.addEventListener("click", function(){
+    if(generatedSentences[currentScentenceIndex] !== undefined){
+      currentScentenceIndex++
+      renderLearningScreen()
+    }else {
+
+    }
+    
+    
+  })
+
+  div.append(p,input,btn )
 
   return div 
 }
@@ -137,6 +151,8 @@ function buildImportScreenUI(){
 div.append(p,fileInput)
 return div
 }
+
+
 
 //EVENT HANDLERS 
 function handleExtractFrench(event, onComplete){
@@ -175,5 +191,8 @@ function handleExtractFrench(event, onComplete){
 
   })
   }
+
+
+  
 
 renderHomeScreen()
