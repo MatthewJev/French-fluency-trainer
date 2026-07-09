@@ -2,6 +2,7 @@ const app = document.getElementById("app")
 
 
 let selectedMode = null 
+let frenchSentences =[]
 const frenchWords = [
   "je", "tu", "elle", "nous", "vous", "ils", "elles",
   "suis", "es", "est", "sommes", "êtes", "sont",
@@ -28,6 +29,20 @@ const frenchWords = [
   "manger", "parler", "prendre", "aller", "venir",
   "voir", "dire", "faire", "vouloir", "pouvoir"
 ];
+
+let generatedSentences = [
+  {
+    french: "Je vais à la maison.",
+    english: "I am going home."
+  },
+  {
+    french: "Elle prend le train demain.",
+    english: "She is taking the train tomorrow."
+  }
+];
+
+let currentScentenceIndex = 0
+
 // RENDER FUNCTIONS
 function renderHomeScreen(){
 
@@ -84,9 +99,12 @@ return div
 function buildLearningScreenUI(){
   let p = document.createElement("p")
   let div = document.createElement("div")
+  let btn = document.createElement("button")
 
-  p.textContent = "this is the learing screen"
-  div.append(p)
+  p.textContent = generatedSentences[currentScentenceIndex].french
+  btn.textContent = "next scentence"
+
+  div.append(p,btn)
 
   return div 
 }
@@ -95,19 +113,38 @@ function buildImportScreenUI(){
   let div = document.createElement("div")
   let p = document.createElement("p")
   let fileInput = document.createElement("input")
+  let successMsg = document.createElement("p")
+  let btn = document.createElement("button")
 
   p.textContent = "Import anki cards below"
+  btn.textContent = "Start practicing"
+
+  btn.addEventListener("click", ()=>{renderLearningScreen()})
+  
+
 
   fileInput.type = "file"
   fileInput.accept = ".txt,.csv"
 
-  fileInput.addEventListener("change",function(event){
+  fileInput.addEventListener("change",function(){
+    handleExtractFrench(event, function(){
+      successMsg.textContent = `${frenchSentences.length} scentences imported`
+      div.append(successMsg, btn)
+    })
+
+  })
+
+div.append(p,fileInput)
+return div
+}
+
+//EVENT HANDLERS 
+function handleExtractFrench(event, onComplete){
   let file = event.target.files[0]
 
   file.text()
   .then(function(data){
     let lines = data.split("\n")
-
     lines.forEach(element => {
       
       let newLine = element.split("\t")
@@ -117,7 +154,7 @@ function buildImportScreenUI(){
       if(newLine.length !== 2){
         return
       }else{
-       let leftSide = newLine[0]
+      let leftSide = newLine[0]
       let rightSide = newLine[1]
 
       let leftWords = leftSide.split(" ")
@@ -126,28 +163,17 @@ function buildImportScreenUI(){
       let checkLeft = leftWords.some(element=>{
         return frenchWords.includes(element);
       })
- let frenchSentence = null 
+
       if(checkLeft === true){
-       frenchSentence = leftSide
-      } else frenchSentence = rightSide
+       frenchSentences.push(leftSide)
+      } else frenchSentences.push(rightSide)
     
-      console.log(frenchSentence) 
+      console.log(frenchSentences) 
       }
-
-      
+      onComplete()
     }) 
- 
-  })
-
 
   })
-
-div.append(p,fileInput)
-
-
-
-return div
-
-}
+  }
 
 renderHomeScreen()
