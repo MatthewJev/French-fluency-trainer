@@ -41,7 +41,7 @@ let generatedSentences = [
   }
 ];
 
-let currentScentenceIndex = 0
+let currentSentenceIndex = 0
 
 // RENDER FUNCTIONS
 function renderHomeScreen(){
@@ -108,7 +108,7 @@ function buildLearningScreenUI(){
   let input = document.createElement ("input")
 
   
-  p.textContent = generatedSentences[currentScentenceIndex].french
+  p.textContent = generatedSentences[currentSentenceIndex].french
   btn.textContent = "enter"
   input.placeholder = "what did you hear?"
 
@@ -117,7 +117,7 @@ function buildLearningScreenUI(){
     renderCompletionScreen()
     }else {
     
-    currentScentenceIndex++
+    currentSentenceIndex++
     renderLearningScreen()
     }
     
