@@ -104,27 +104,56 @@ return div
 function buildLearningScreenUI(){
   let p = document.createElement("p")
   let div = document.createElement("div")
-  let btn = document.createElement("button")
+  let enterBtn = document.createElement("button")
+  let skipBtn = document.createElement("button")
   let input = document.createElement ("input")
+  let answer = document.createElement("p")
+  let showAnsBtn = document.createElement("button")
+  let responseDiv = document.createElement("div")
 
-  
+  responseDiv.append(answer, showAnsBtn)
+  showAnsBtn.textContent = "show answer"
+
   p.textContent = generatedSentences[currentSentenceIndex].french
-  btn.textContent = "enter"
+  enterBtn.textContent = "check"
+  skipBtn.textContent = "skip"
   input.placeholder = "what did you hear?"
 
-  btn.addEventListener("click", function(){
-    if(currentSentenceIndex === generatedSentences.length - 1){
-    renderCompletionScreen()
-    }else {
-    
-    currentSentenceIndex++
-    renderLearningScreen()
-    }
-    
+  enterBtn.addEventListener("click", function(){
+   answer.textContent= checkUserEntry(input)
+   div.append(responseDiv)
+
+   if (answer.textContent === "please enter an answer"){
+    return 
+   }else{
+
+   }
     
   })
 
-  div.append(p,input,btn )
+  skipBtn.addEventListener("click", ()=>{
+
+    if (currentSentenceIndex === generatedSentences.length-1){
+      renderCompletionScreen()
+    }
+
+    currentSentenceIndex++
+    renderLearningScreen()
+
+  })
+
+  showAnsBtn.addEventListener("click", function(){
+  if(currentSentenceIndex === generatedSentences.length - 1){
+      renderCompletionScreen()
+      }else {
+      
+      currentSentenceIndex++
+      
+      
+      renderLearningScreen()
+      }
+      })
+  div.append(p,input,enterBtn,skipBtn)
 
   return div 
 }
@@ -209,7 +238,17 @@ function handleExtractFrench(event, onComplete){
 
   })
   }
+  
+  function checkUserEntry(input){
+    if (input.value === ""){
+      return "please enter an answer"
+    }if (input.value === generatedSentences[currentSentenceIndex].french) {
+      return "Correct"
+    } else {
+      return "Incorrect"
+    }
 
+  }
 
   
 
