@@ -104,22 +104,30 @@ return div
 function buildLearningScreenUI(){
   let p = document.createElement("p")
   let div = document.createElement("div")
-  let enterBtn = document.createElement("button")
+  let checkBtn = document.createElement("button")
   let skipBtn = document.createElement("button")
   let input = document.createElement ("input")
   let answer = document.createElement("p")
   let showAnsBtn = document.createElement("button")
   let responseDiv = document.createElement("div")
 
+ 
+
   responseDiv.append(answer, showAnsBtn)
   showAnsBtn.textContent = "show answer"
 
   p.textContent = generatedSentences[currentSentenceIndex].french
-  enterBtn.textContent = "check"
+  checkBtn.textContent = "check"
   skipBtn.textContent = "skip"
   input.placeholder = "what did you hear?"
 
-  enterBtn.addEventListener("click", function(){
+ checkBtn.disabled = true
+
+input.addEventListener("input", function () {
+    checkBtn.disabled = input.value.trim() === ""
+})
+
+  checkBtn.addEventListener("click", function(){
    answer.textContent= checkUserEntry(input)
    div.append(responseDiv)
 
@@ -139,7 +147,7 @@ function buildLearningScreenUI(){
 
     currentSentenceIndex++
     renderLearningScreen()
-
+ 
   })
 
   showAnsBtn.addEventListener("click", function(){
@@ -153,7 +161,7 @@ function buildLearningScreenUI(){
       renderLearningScreen()
       }
       })
-  div.append(p,input,enterBtn,skipBtn)
+  div.append(p,input,checkBtn,skipBtn)
 
   return div 
 }
@@ -212,7 +220,6 @@ function handleExtractFrench(event, onComplete){
       
       let newLine = element.split("\t")
 
-      console.log(newLine) 
 
       if(newLine.length !== 2){
         return
@@ -231,7 +238,6 @@ function handleExtractFrench(event, onComplete){
        frenchSentences.push(leftSide)
       } else frenchSentences.push(rightSide)
     
-      console.log(frenchSentences) 
       }
       onComplete()
     }) 
@@ -240,15 +246,26 @@ function handleExtractFrench(event, onComplete){
   }
   
   function checkUserEntry(input){
-    if (input.value === ""){
-      return "please enter an answer"
-    }if (input.value === generatedSentences[currentSentenceIndex].french) {
+   let cleanInput = normalize(input.value)
+   let cleanGeneratedScentence = normalize(generatedSentences[currentSentenceIndex].french)
+
+   console.log(cleanInput)
+   console.log (cleanGeneratedScentence)
+
+    if (cleanInput === cleanGeneratedScentence) {
       return "Correct"
     } else {
       return "Incorrect"
     }
-
   }
+
+  function normalize(sentence){
+   return sentence.toLowerCase().trim().replace(/[.,?!":;]/g, "")
+  }
+
+    
+
+  
 
   
 
