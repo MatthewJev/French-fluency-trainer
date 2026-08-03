@@ -109,12 +109,10 @@ function buildLearningScreenUI(){
   let input = document.createElement ("input")
   let answer = document.createElement("p")
   let showAnsBtn = document.createElement("button")
-  let responseDiv = document.createElement("div")
+  let responseIncorrect = document.createElement("div")
+  let responseCorrect = document.createElement("div")
 
- 
 
-  responseDiv.append(answer, showAnsBtn)
-  showAnsBtn.textContent = "show answer"
 
   p.textContent = generatedSentences[currentSentenceIndex].french
   checkBtn.textContent = "check"
@@ -128,25 +126,25 @@ input.addEventListener("input", function () {
 })
 
   checkBtn.addEventListener("click", function(){
+
    answer.textContent= checkUserEntry(input)
-   div.append(responseDiv)
 
-   if (answer.textContent === "please enter an answer"){
-    return 
+   if (answer.textContent === "Correct"){
+    skipBtn.textContent = "Continue"
+    responseCorrect.replaceChildren(answer,skipBtn)
+    div.append(responseCorrect)
    }else{
-
+    skipBtn.textContent = "Continue"
+    responseIncorrect.replaceChildren(answer, skipBtn)
+    div.append(responseIncorrect)
    }
+   
+
     
   })
 
   skipBtn.addEventListener("click", ()=>{
-
-    if (currentSentenceIndex === generatedSentences.length-1){
-      renderCompletionScreen()
-    }
-
-    currentSentenceIndex++
-    renderLearningScreen()
+    handleNextScentence()
  
   })
 
@@ -260,9 +258,17 @@ function handleExtractFrench(event, onComplete){
   }
 
   function normalize(sentence){
-   return sentence.toLowerCase().trim().replace(/[.,?!":;]/g, "")
+   return sentence.toLowerCase().trim().replace(/[.,?!":;]/g, "").normalize("NFD").replace(/[\u0300-\u036f]/g, "")
   }
 
+  function handleNextScentence(){
+    if (currentSentenceIndex === generatedSentences.length-1){
+      renderCompletionScreen()
+    }
+
+    currentSentenceIndex++
+    renderLearningScreen()
+  }
     
 
   
