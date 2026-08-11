@@ -1,0 +1,111 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;}
+/* ---------- Global ---------- */
+
+body {
+  margin: 0;
+  font-family: Inter, system-ui, sans-serif;
+  background-color: #f6f7fb;
+  color: #1f2937;
+}
+
+/* ---------- Home Screen ---------- */
+
+.home-screen {
+  min-height: 100vh;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  padding-top: 80px;
+  gap: 24px;
+}
+
+.home-screen h1 {
+  margin: 0;
+
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.home-screen > p {
+  margin: 0;
+
+  max-width: 600px;
+
+  font-size: 1.1rem;
+  font-weight: 400;
+  line-height: 1.6;
+  text-align: center;
+  color: #6b7280;
+}
+
+/* ---------- Cards ---------- */
+
+.mode-container {
+  display: flex;
+  flex-direction: row;
+  gap: 28px;
+  margin-top: 20px;
+}
+
+.mode-card {
+  width: 300px;
+  min-height: 240px;
+
+  padding: 28px;
+
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 18px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+
+  text-align: center;
+
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+}
+
+.mode-card h2 {
+  margin: 0;
+
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+.mode-card p {
+  margin: 0;
+
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #6b7280;
+}
+
+/* ---------- Buttons ---------- */
+
+.mode-card button {
+  padding: 12px 24px;
+
+  border: none;
+  border-radius: 12px;
+
+  background: #2563eb;
+  color: white;
+
+  font-size: 1rem;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition: 0.2s ease;
+}
+
+.mode-card button:hover {
+  background: #1d4ed8;
+}
