@@ -25,11 +25,19 @@ modeCards.append(listenCard,speakingCard)
 
 div.className = "home-screen"
 modeCards.className = "mode-container"
-listenCard.className = "mode-card"
-speakingCard.className = "mode-card"
+listenCard.className = "card"
+speakingCard.className = "card"
 speechBtn.className = "primary-button"
 listenBtn.className = "primary-button"
 
+header.className = "page-title";
+subtitle.className = "page-subtitle";
+listenCard.className = "card";
+speakingCard.className = "card";
+listenDiscrptn.className = "card-description";
+speakDiscrptn.className = "card-description";
+listenBtn.className = "card-button";
+speechBtn.className = "card-button";
 
 header.textContent = "French Fluency Trainer"
 subtitle.textContent = "Build confidence understanding and speaking real-world French"

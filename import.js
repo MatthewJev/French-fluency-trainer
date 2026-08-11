@@ -30,16 +30,31 @@ let frenchSentences =[]
 
 
 export function buildImportScreenUI(){
-  let div = document.createElement("div")
-  let p = document.createElement("p")
+  let importScreen = document.createElement("div")
+  let title = document.createElement("p")
+  let description = document.createElement("p")
+  let uploadCard = document.createElement("div")
   let fileInput = document.createElement("input")
-  let successMsg = document.createElement("p")
-  let btn = document.createElement("button")
+  let cardUploadDescription = document.createElement("p")
+  let successMessage = document.createElement("p")
+  let startButton = document.createElement("button")
 
-  p.textContent = "Import anki cards below"
-  btn.textContent = "Start practicing"
+  uploadCard.append(cardUploadDescription,fileInput,successMessage,startButton)
 
-  btn.addEventListener("click", ()=>{renderLearningScreen()})
+  title.textContent = "Import Anki deck"
+  description.textContent = "Upload a text or CSV export containing your French sentence cards"
+  cardUploadDescription.textContent = " Drag and drop or browse Supports .txt and .csv"
+  startButton.textContent = "Start practicing"
+
+  importScreen.className = "import-screen"
+  title.className ="page-title"
+  description.className = "page-subtitle"
+  cardUploadDescription.className = "card-description"
+  startButton.className = "card-button"
+
+  uploadCard.className = "card"
+
+  startButton.addEventListener("click", ()=>{renderLearningScreen()})
   
 
   fileInput.type = "file"
@@ -49,12 +64,12 @@ export function buildImportScreenUI(){
 
   handleExtractFrench(event, function() {
 
-    handleCompletedImport(successMsg, btn, div)
+    handleCompletedImport(successMessage, startButton, uploadCard)
 
   })
 })
-div.append(p,fileInput)
-return div
+importScreen.append(title, description, uploadCard)
+return importScreen
 }
 
 
@@ -93,11 +108,11 @@ function handleExtractFrench(event, onComplete){
   })
   }
 
-  function handleCompletedImport(successMsg, startPracticeBtn, div) {
+  function handleCompletedImport(successMsg, startPracticeBtn, uploadCard) {
 
   successMsg.textContent = `${frenchSentences.length} sentences imported`
 
-  div.append(successMsg, startPracticeBtn)
+  uploadCard.append(successMsg, startPracticeBtn)
 
 }
 
