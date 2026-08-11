@@ -4,44 +4,58 @@ import { renderLearningScreen } from "./app.js"
 import { renderCompletionScreen } from "./app.js"
 
 
- export function buildLearningScreenUI(){
-  let p = document.createElement("p")
-  let div = document.createElement("div")
-  let checkBtn = document.createElement("button")
-  let skipBtn = document.createElement("button")
+export function buildLearningScreenUI(){
+  let learningScreen = document.createElement("div")
+  let learningContent = document.createElement("div")
+  let question = document.createElement("p")
   let input = document.createElement ("input")
+  let learningActions = document.createElement("div")
+  let checkAnswer = document.createElement("button")
+  let skipQuestion = document.createElement("button")
+  let answerCorrect = document.createElement("p")
+  let answerIncorrect = document.createElement("p")
+  
   let answer = document.createElement("p")
   let showAnsBtn = document.createElement("button")
-  let responseIncorrect = document.createElement("div")
-  let responseCorrect = document.createElement("div")
+  
 
 
 
-  p.textContent = generatedSentences[currentSentenceIndex].french
-  checkBtn.textContent = "check"
-  skipBtn.textContent = "skip"
+  learningScreen.classList = "learning-screen"
+  learningContent.classList = "learning-content"
+  input.className = "answer-input"
+  learningActions.className = "learning-actions"
+  checkAnswer.className ="check-button"
+  skipQuestion.className ="skip-button"
+
+  question.textContent = generatedSentences[currentSentenceIndex].french
+  checkAnswer.textContent = "check"
+  skipQuestion.textContent = "skip"
   input.placeholder = "what did you hear?"
+  answerCorrect.textContent = `Amazing`
+  answerIncorrect.textContent = `correct solution: ${generatedSentences[currentSentenceIndex].french}`
 
- checkBtn.disabled = true
+  checkAnswer.disabled = true
 
-input.addEventListener("input", function () {
-    checkBtn.disabled = input.value.trim() === ""
-})
-
-  checkBtn.addEventListener("click", function(){
-    handleCheckAnswer(answer, input, skipBtn, responseCorrect,responseIncorrect,div  )
+  input.addEventListener("input", function () {
+    checkAnswer.disabled = input.value.trim() === ""
   })
 
-  skipBtn.addEventListener("click", ()=>{
+  checkAnswer.addEventListener("click", function(){
+    handleCheckAnswer(input,answer,learningActions,answerIncorrect,answerCorrect,skipQuestion)
+  })
+
+  skipQuestion.addEventListener("click", ()=>{
     handleNextScentence()
   })
 
   showAnsBtn.addEventListener("click", function(){
 
   })
-  div.append(p,input,checkBtn,skipBtn)
+  learningActions.append(checkAnswer,skipQuestion)
+  learningScreen.append(question,input,learningActions)
 
-  return div 
+  return learningScreen 
 }
 
 
@@ -59,49 +73,49 @@ export function buildCompletionScreenUI(){
 }
 
 
- function handleCheckAnswer(answer, input, skipBtn, responseCorrect,responseIncorrect,div){
-    answer.textContent= checkUserEntry(input)
+function handleCheckAnswer(input,answer,learningActions,answerIncorrect,answerCorrect,skipQuestion){
+  console.log(input.value)
+  answer.textContent= checkUserEntry(input)
+  skipQuestion.textContent = "continue"
 
-   if (answer.textContent === "Correct"){
-    skipBtn.textContent = "Continue"
-    responseCorrect.replaceChildren(answer,skipBtn)
-    div.append(responseCorrect)
-   }else{
-    skipBtn.textContent = "Continue"
-    responseIncorrect.replaceChildren(answer, skipBtn)
-    div.append(responseIncorrect)
-   }
 
+  if (answer.textContent === "Correct"){
+    learningActions.replaceChildren(answerCorrect,skipQuestion )
+  }else{
+    learningActions.replaceChildren(answerIncorrect,skipQuestion)
   }
 
+}
 
-  function handleNextScentence(){
-    if (currentSentenceIndex === generatedSentences.length-1){
-      renderCompletionScreen()
-      return
-    }
 
-    setCurrentScentenceIndex(currentSentenceIndex + 1)
-    renderLearningScreen()
+function handleNextScentence(){
+  if (currentSentenceIndex === generatedSentences.length-1){
+    renderCompletionScreen()
+    return
   }
 
+  setCurrentScentenceIndex(currentSentenceIndex + 1)
+  renderLearningScreen()
+}
 
-  function checkUserEntry(input){
-   let cleanInput = normalize(input.value)
-   let cleanGeneratedScentence = normalize(generatedSentences[currentSentenceIndex].french)
 
-   console.log(cleanInput)
-   console.log (cleanGeneratedScentence)
+function checkUserEntry(input){
+  console.log(input.value)
+  let cleanInput = normalize(input.value)
+  let cleanGeneratedScentence = normalize(generatedSentences[currentSentenceIndex].french)
 
-    if (cleanInput === cleanGeneratedScentence) {
-      return "Correct"
-    } else {
-      return "Incorrect"
-    }
+  console.log(cleanInput)
+  console.log (cleanGeneratedScentence)
+
+  if (cleanInput === cleanGeneratedScentence) {
+    return "Correct"
+  } else {
+    return "Incorrect"
   }
+}
 
-  function normalize(sentence){
-   return sentence.toLowerCase().trim().replace(/[.,?!":;]/g, "").normalize("NFD").replace(/[\u0300-\u036f]/g, "")
-  }
+function normalize(sentence){
+  return sentence.toLowerCase().trim().replace(/[.,?!":;]/g, "").normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+}
 
 
