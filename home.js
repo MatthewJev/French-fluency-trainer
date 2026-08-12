@@ -18,10 +18,7 @@ let speakDiscrptn = document.createElement("p")
 let speechBtn = document.createElement("button")
 let listenBtn = document.createElement("button")
 
-listenCard.append(listenBtn,listenDiscrptn)
-speakingCard.append(speechBtn,speakDiscrptn)
 
-modeCards.append(listenCard,speakingCard)
 
 div.className = "home-screen"
 modeCards.className = "mode-container"
@@ -55,6 +52,10 @@ listenBtn.addEventListener("click", function(){
   renderImportScreen()
   
 })
+listenCard.append(listenBtn,listenDiscrptn)
+speakingCard.append(speechBtn,speakDiscrptn)
+
+modeCards.append(listenCard,speakingCard)
 
 div.append(header, subtitle, modeCards)
 

@@ -39,37 +39,37 @@ export function buildImportScreenUI(){
   let successMessage = document.createElement("p")
   let startButton = document.createElement("button")
 
-  uploadCard.append(cardUploadDescription,fileInput,successMessage,startButton)
+ 
+  importScreen.className = "import-screen"
+  title.className ="page-title"
+  description.className = "page-subtitle"
+  cardUploadDescription.className = "card-description"
+  startButton.className = "card-button"
+  uploadCard.className = "card"
+  
+  fileInput.type = "file"
+  fileInput.accept = ".txt,.csv"
 
   title.textContent = "Import Anki deck"
   description.textContent = "Upload a text or CSV export containing your French sentence cards"
   cardUploadDescription.textContent = " Drag and drop or browse Supports .txt and .csv"
   startButton.textContent = "Start practicing"
 
-  importScreen.className = "import-screen"
-  title.className ="page-title"
-  description.className = "page-subtitle"
-  cardUploadDescription.className = "card-description"
-  startButton.className = "card-button"
-
-  uploadCard.className = "card"
 
   startButton.addEventListener("click", ()=>{renderLearningScreen()})
   
 
-  fileInput.type = "file"
-  fileInput.accept = ".txt,.csv"
+  fileInput.addEventListener("change", function(event) {
+    handleExtractFrench(event, function() {
 
- fileInput.addEventListener("change", function(event) {
+      handleCompletedImport(successMessage, startButton, uploadCard)
 
-  handleExtractFrench(event, function() {
-
-    handleCompletedImport(successMessage, startButton, uploadCard)
-
+    })
   })
-})
-importScreen.append(title, description, uploadCard)
-return importScreen
+
+  uploadCard.append(cardUploadDescription,fileInput,successMessage,startButton)
+  importScreen.append(title, description, uploadCard)
+  return importScreen
 }
 
 

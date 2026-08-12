@@ -1,3 +1,4 @@
+
 import {generatedSentences, setCurrentScentenceIndex} from "./app.js"
 import { currentSentenceIndex } from "./app.js"
 import { renderLearningScreen } from "./app.js"
@@ -12,8 +13,9 @@ export function buildLearningScreenUI(){
   let learningActions = document.createElement("div")
   let checkAnswer = document.createElement("button")
   let skipQuestion = document.createElement("button")
-  let answerCorrect = document.createElement("p")
-  let answerIncorrect = document.createElement("p")
+  let feedback = document.createElement("div")
+  let feedbackTitle = document.createElement("p")
+  let feedbackAnswer = document.createElement("p")
   
   let answer = document.createElement("p")
   let showAnsBtn = document.createElement("button")
@@ -27,13 +29,15 @@ export function buildLearningScreenUI(){
   learningActions.className = "learning-actions"
   checkAnswer.className ="check-button"
   skipQuestion.className ="skip-button"
+  feedback.className = "feedback"
+  feedbackAnswer.className = "feedback-answer"
+  feedbackTitle.className = "feedback-title"
 
   question.textContent = generatedSentences[currentSentenceIndex].french
   checkAnswer.textContent = "check"
   skipQuestion.textContent = "skip"
   input.placeholder = "what did you hear?"
-  answerCorrect.textContent = `Amazing`
-  answerIncorrect.textContent = `correct solution: ${generatedSentences[currentSentenceIndex].french}`
+
 
   checkAnswer.disabled = true
 
@@ -42,18 +46,20 @@ export function buildLearningScreenUI(){
   })
 
   checkAnswer.addEventListener("click", function(){
-    handleCheckAnswer(input,answer,learningActions,answerIncorrect,answerCorrect,skipQuestion)
+    handleCheckAnswer(input,answer,learningActions,feedback,feedbackTitle,feedbackAnswer)
   })
 
   skipQuestion.addEventListener("click", ()=>{
-    handleNextScentence()
+    handleCheckAnswer(input,answer,learningActions,feedback,feedbackTitle,feedbackAnswer)
   })
 
   showAnsBtn.addEventListener("click", function(){
 
   })
+  feedback.append(feedbackTitle,feedbackAnswer)
   learningActions.append(checkAnswer,skipQuestion)
-  learningScreen.append(question,input,learningActions)
+  learningContent.append(question,input,learningActions)
+  learningScreen.append(learningContent,learningActions)
 
   return learningScreen 
 }
@@ -73,20 +79,42 @@ export function buildCompletionScreenUI(){
 }
 
 
-function handleCheckAnswer(input,answer,learningActions,answerIncorrect,answerCorrect,skipQuestion){
+function handleCheckAnswer(input,answer,learningActions,feedback,feedbackTitle,feedbackAnswer){
   console.log(input.value)
   answer.textContent= checkUserEntry(input)
-  skipQuestion.textContent = "continue"
+ let continueButton = document.createElement("button")
+ continueButton.textContent = "continue"
 
+ continueButton.addEventListener("click", ()=>{
+  handleNextScentence()
+ })
 
-  if (answer.textContent === "Correct"){
-    learningActions.replaceChildren(answerCorrect,skipQuestion )
-  }else{
-    learningActions.replaceChildren(answerIncorrect,skipQuestion)
-  }
+if (answer.textContent === "Correct") {
 
+    feedback.className = "feedback feedback-correct"
+    learningActions.className = "learning-actions learning-actions-correct"
+
+    feedbackTitle.textContent = "Nice Work!"
+    feedbackAnswer.textContent = ""
+
+    continueButton.className = "continue-button continue-button-correct"
+
+    learningActions.replaceChildren(feedback, continueButton)
+
+} else {
+
+    feedback.className = "feedback feedback-incorrect"
+    learningActions.className = "learning-actions learning-actions-incorrect"
+
+    feedbackTitle.textContent = "Not quite!"
+    feedbackAnswer.textContent =
+        `Correct answer: ${generatedSentences[currentSentenceIndex].french}`
+
+    continueButton.className = "continue-button continue-button-incorrect"
+
+    learningActions.replaceChildren(feedback, continueButton)
 }
-
+}
 
 function handleNextScentence(){
   if (currentSentenceIndex === generatedSentences.length-1){
