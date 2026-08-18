@@ -59,13 +59,14 @@ export function buildImportScreenUI(){
   startButton.addEventListener("click", ()=>{renderLearningScreen()})
   
 
-  fileInput.addEventListener("change", function(event) {
-    handleExtractFrench(event, function() {
-
-      handleCompletedImport(successMessage, startButton, uploadCard)
-
-    })
+  fileInput.addEventListener("change", function(event){
+    console.log("change")
+     handleCheckFile(event)
   })
+
+     
+
+  
 
   uploadCard.append(cardUploadDescription,fileInput,successMessage,startButton)
   importScreen.append(title, description, uploadCard)
@@ -115,6 +116,40 @@ function handleExtractFrench(event, onComplete){
   uploadCard.append(successMsg, startPracticeBtn)
 
 }
+
+function handleCheckFile(event){
+ let file = event.target.files[0]
+
+    if (!file) {
+
+        console.log("No file selected")
+
+        return
+
+    }
+
+    if (!file.name.endsWith(".txt") && !file.name.endsWith(".csv")) {
+
+        console.log("Invalid file type")
+
+        return
+
+    }
+
+    if (file.size === 0) {
+
+        console.log("File is empty")
+
+        return
+
+    }
+
+    console.log("Valid file")
+}
+
+
+
+
 
 
   

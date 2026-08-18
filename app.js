@@ -1,7 +1,7 @@
 import { buildHomePageUI } from "./home.js";
 import {buildImportScreenUI} from "./import.js"
 import { buildLearningScreenUI } from "./practice.js";
-import { buildCompletionScreenUI } from "./practice.js";
+import { buildCompletionScreenUI } from "./completeScreen.js";
 
 
 const app = document.getElementById("app");
@@ -10,8 +10,12 @@ renderHomeScreen();
 
 
 export let selectedMode = null 
+export let currentSentenceIndex = 0
 
 
+export function setGeneratedScenteces(scentence){
+generatedSentences = scentence
+}
 
 export let generatedSentences = [
   {
@@ -24,7 +28,7 @@ export let generatedSentences = [
   }
 ];
 
-export let currentSentenceIndex = 0
+
 
 export function setSelectedMode(mode){
     selectedMode = mode

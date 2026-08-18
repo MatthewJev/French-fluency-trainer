@@ -66,18 +66,6 @@ export function buildLearningScreenUI(){
 
 
 
-export function buildCompletionScreenUI(){
-  let p = document.createElement("p")
-  let btn = document.createElement("button")
-  let div = document.createElement("div")
-
-  p.textContent = "scentences completed"
-  btn.textContent = "generate more"
-  div.append(p,btn)
-
-  return div
-}
-
 
 function handleCheckAnswer(input,answer,learningActions,feedback,feedbackTitle,feedbackAnswer){
   console.log(input.value)
