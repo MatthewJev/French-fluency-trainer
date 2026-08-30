@@ -96,7 +96,7 @@ if (answer.textContent === "Correct") {
 
     feedbackTitle.textContent = "Not quite!"
     feedbackAnswer.textContent =
-        `Correct answer: ${generatedSentences[currentSentenceIndex].french}`
+        `Correct answer: ${generatedSentences[currentSentenceIndex].english}`
 
     continueButton.className = "continue-button continue-button-incorrect"
 
